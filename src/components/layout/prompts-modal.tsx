@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Reusable prompt starters; picking one drops it into the composer.
+ */
 import { ArrowUpRight } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { PROMPT_LIBRARY } from "@/data/seed";

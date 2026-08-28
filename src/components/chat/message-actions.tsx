@@ -1,13 +1,16 @@
 "use client";
 
+/**
+ * Hover toolbar on a message: copy, edit or regenerate, refine, and bookmark.
+ */
 import {
   Bookmark,
   BookmarkCheck,
   Check,
   Copy,
+  PenLine,
   RefreshCw,
   SquarePen,
-  Wand2,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -76,7 +79,7 @@ export function MessageActions({
     {
       key: "refine",
       label: isUser ? "Improve prompt" : "Refine answer",
-      icon: <Wand2 className="h-4 w-4" />,
+      icon: <PenLine className="h-4 w-4" />,
       onClick: onRefine,
       disabled,
     },

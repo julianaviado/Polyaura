@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Accessible switch control used for the reference toggles.
+ */
 import { cn } from "@/lib/utils";
 
 type ToggleProps = {
@@ -37,7 +40,7 @@ export function Toggle({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
-        "relative inline-flex shrink-0 items-center rounded-full p-0.75 transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-45",
+        "hit-target relative inline-flex shrink-0 items-center rounded-full p-0.75 transition-colors duration-200 disabled:cursor-not-allowed disabled:opacity-45",
         track,
         checked ? "bg-brand" : "bg-[#d9dfe6]",
         className,

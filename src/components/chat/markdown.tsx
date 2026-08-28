@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Markdown renderer for assistant replies, delegating fenced code to CodeBlock.
+ */
 import { memo } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import remarkGfm from "remark-gfm";

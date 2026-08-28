@@ -1,3 +1,7 @@
+/**
+ * Domain types shared across the store, components, and the API route.
+ */
+
 export type Role = "user" | "assistant";
 
 export type AttachmentStatus = "uploading" | "ready" | "error";

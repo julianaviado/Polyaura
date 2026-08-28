@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Centered dialog shell with backdrop, escape handling, and a scrolling body.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { useEffect } from "react";
@@ -13,8 +16,6 @@ type ModalProps = {
   description?: string;
   children: React.ReactNode;
   className?: string;
-  /** Aligns the sheet to the top of the viewport, for palette-style dialogs. */
-  align?: "center" | "top";
 };
 
 export function Modal({
@@ -24,7 +25,6 @@ export function Modal({
   description,
   children,
   className,
-  align = "center",
 }: ModalProps) {
   useEffect(() => {
     if (!open) return;
@@ -38,12 +38,7 @@ export function Modal({
   return (
     <AnimatePresence>
       {open && (
-        <div
-          className={cn(
-            "fixed inset-0 z-50 flex justify-center px-4",
-            align === "top" ? "items-start pt-[12vh]" : "items-center py-10",
-          )}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-10">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -82,7 +77,10 @@ export function Modal({
               </IconButton>
             </header>
 
-            <div className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto">
+            <div
+              tabIndex={0}
+              className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto"
+            >
               {children}
             </div>
           </motion.div>

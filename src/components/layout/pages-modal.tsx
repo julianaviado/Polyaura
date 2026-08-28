@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Grid overview of every conversation in the workspace.
+ */
 import { MessageSquareText, Paperclip } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { useChatStore } from "@/store/chat-store";
@@ -35,7 +38,7 @@ export function PagesModal() {
               .trim()
               .slice(0, 150) ??
             conversation.messages[0]?.content.slice(0, 150) ??
-            "Empty chat — nothing said yet.";
+            "Empty chat. Nothing said yet.";
 
           return (
             <button

@@ -1,3 +1,7 @@
+/**
+ * Attachment helpers, including the simulated upload progress ticker.
+ */
+
 import type { Attachment } from "@/lib/types";
 import { fileKind, uid } from "@/lib/utils";
 

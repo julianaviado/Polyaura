@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * File chip shown in the composer and on messages: type badge, size, upload
+ * progress, and an optional remove control.
+ */
 import { X } from "lucide-react";
 import { motion } from "motion/react";
 import type { Attachment } from "@/lib/types";
@@ -96,7 +100,7 @@ export function AttachmentCard({
           type="button"
           onClick={() => onRemove(attachment.id)}
           aria-label={`Remove ${attachment.name}`}
-          className="-mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-surface-sunken hover:text-ink"
+          className="hit-target -mr-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-surface-sunken hover:text-ink"
         >
           <X className="h-4 w-4" strokeWidth={2} />
         </button>

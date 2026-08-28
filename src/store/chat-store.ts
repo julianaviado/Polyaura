@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Central Zustand store: conversations, message streaming, reference toggles,
+ * panel visibility, and localStorage persistence.
+ */
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import {
@@ -43,6 +47,7 @@ type ChatState = {
   pagesOpen: boolean;
   savedOpen: boolean;
   promptsOpen: boolean;
+  legalOpen: "terms" | "privacy" | null;
   readerMode: boolean;
   editingMessageId: string | null;
   isStreaming: boolean;
@@ -82,6 +87,7 @@ type ChatState = {
   setPagesOpen: (open: boolean) => void;
   setSavedOpen: (open: boolean) => void;
   setPromptsOpen: (open: boolean) => void;
+  setLegalOpen: (document: "terms" | "privacy" | null) => void;
   setReaderMode: (on: boolean) => void;
 };
 
@@ -283,6 +289,7 @@ export const useChatStore = create<ChatState>()(
         pagesOpen: false,
         savedOpen: false,
         promptsOpen: false,
+        legalOpen: null,
         readerMode: false,
         editingMessageId: null,
         isStreaming: false,
@@ -536,6 +543,7 @@ export const useChatStore = create<ChatState>()(
         setPagesOpen: (open) => set({ pagesOpen: open }),
         setSavedOpen: (open) => set({ savedOpen: open }),
         setPromptsOpen: (open) => set({ promptsOpen: open }),
+        setLegalOpen: (document) => set({ legalOpen: document }),
         setReaderMode: (on) =>
           set(
             on

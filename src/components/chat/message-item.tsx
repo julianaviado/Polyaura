@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * A single conversation turn: markdown or plain text body, attachments,
+ * citations, inline editing, and the hover action rail.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import {
   AlertCircle,

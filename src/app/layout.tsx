@@ -9,7 +9,7 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
-  title: "Polyaura — AI chat",
+  title: "Polyaura AI chat",
   description:
     "A design-led AI chat interface: streaming answers, attachments, reference toggles and a prompt library.",
   icons: { icon: "/favicon.svg" },
@@ -28,7 +28,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={figtree.variable}>
-      <body>{children}</body>
+      <body>
+        <a href="#composer-input" className="skip-link">
+          Skip to message input
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

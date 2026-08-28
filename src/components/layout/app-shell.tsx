@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Top-level client shell: composes the sidebar, transcript, composer, panels,
+ * and modals, and owns global keyboard shortcuts and file drag-and-drop.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import { UploadCloud } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -7,6 +11,7 @@ import { Composer, type ComposerHandle } from "@/components/chat/composer";
 import { MessageList } from "@/components/chat/message-list";
 import { BottomBar } from "@/components/layout/bottom-bar";
 import { CommandPalette } from "@/components/layout/command-palette";
+import { LegalModal } from "@/components/layout/legal-modal";
 import { PagesModal } from "@/components/layout/pages-modal";
 import { PromptsModal } from "@/components/layout/prompts-modal";
 import { SavedModal } from "@/components/layout/saved-modal";
@@ -149,6 +154,7 @@ export function AppShell() {
       <PagesModal />
       <SavedModal />
       <PromptsModal onUse={usePrompt} />
+      <LegalModal />
 
       <AnimatePresence>
         {dragging && (
@@ -165,7 +171,7 @@ export function AppShell() {
                 Drop files to attach
               </p>
               <p className="text-[13px] text-ink-muted">
-                PDFs, images and specs — up to 25 MB each
+                PDFs, images and specs, up to 25 MB each
               </p>
             </div>
           </motion.div>

@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Chat history column: grouped conversation list with rename, pin, and delete,
+ * plus the overlay drawer variant used on narrow viewports.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import {
   MoreHorizontal,
@@ -176,7 +180,7 @@ function ConversationRow({ conversation }: { conversation: Conversation }) {
 }
 
 type SidebarProps = {
-  /** True when the column is down to its icon rail — the history then lives in
+  /** True when the column is down to its icon rail; the history then lives in
    * `SidebarDrawer`, or nowhere at all in reading mode. */
   collapsed?: boolean;
 };
@@ -187,7 +191,7 @@ function History() {
   const setPaletteOpen = useChatStore((state) => state.setPaletteOpen);
 
   // History buckets depend on the current date, so they are resolved on the
-  // client only — the page itself is statically prerendered.
+  // client only; the page itself is statically prerendered.
   const mounted = useMounted();
   const groups = useMemo(
     () => groupConversations(conversations),
@@ -220,8 +224,22 @@ function History() {
 
       <nav
         aria-label="Chat history"
+        tabIndex={0}
         className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto px-1"
       >
+        {!mounted && (
+          <div aria-busy="true" className="flex flex-col gap-2 px-3 pt-1">
+            <span className="sr-only">Loading chat history</span>
+            {[92, 72, 84, 64].map((width, index) => (
+              <span
+                key={index}
+                aria-hidden
+                className="skeleton h-7"
+                style={{ width: `${width}%` }}
+              />
+            ))}
+          </div>
+        )}
         {mounted &&
           groups.map((group) => (
             <section key={group.bucket} className="mb-4">

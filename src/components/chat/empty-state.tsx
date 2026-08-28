@@ -1,7 +1,10 @@
 "use client";
 
+/**
+ * Greeting and prompt starters shown when a conversation has no messages.
+ */
 import { motion } from "motion/react";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { PROMPT_SUGGESTIONS, USER } from "@/data/seed";
 
 type EmptyStateProps = {
@@ -15,9 +18,10 @@ export function EmptyState({ onPick }: EmptyStateProps) {
         initial={{ opacity: 0, scale: 0.92 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand text-white shadow-float"
+        className="flex h-14 w-14 select-none items-center justify-center rounded-2xl bg-brand text-2xl font-bold text-white shadow-float"
+        aria-hidden
       >
-        <Sparkles className="h-6 w-6" />
+        P
       </motion.div>
 
       <motion.h2

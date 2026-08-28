@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Search dialog over conversations and quick actions, opened with Cmd+K and
+ * fully keyboard navigable.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import {
   CornerDownLeft,

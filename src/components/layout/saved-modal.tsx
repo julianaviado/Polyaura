@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * List of answers the user bookmarked as memories.
+ */
 import { BookmarkX } from "lucide-react";
 import { Modal } from "@/components/ui/modal";
 import { useChatStore } from "@/store/chat-store";

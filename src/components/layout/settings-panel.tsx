@@ -1,5 +1,10 @@
 "use client";
 
+/**
+ * Chat Settings panel: preset picker, reference toggles with per-source
+ * visibility, and the workspace upload list. Docks as a column or floats as an
+ * overlay depending on viewport width.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import { Eye, EyeOff, Info, Upload, Waypoints, X } from "lucide-react";
 import { useRef } from "react";
@@ -69,7 +74,10 @@ export function SettingsPanel({ floating }: SettingsPanelProps) {
   );
 
   const body = (
-    <div className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto">
+    <div
+      tabIndex={0}
+      className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto"
+    >
       <section className="border-b border-line px-6 py-5">
         <SectionLabel>Reference</SectionLabel>
 

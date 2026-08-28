@@ -10,22 +10,25 @@
   --font-mono:
     ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
 
-  /* Canvas */
-  --color-canvas: #eef1f5;
-  --color-canvas-deep: #e4e9ef;
+  /* Canvas: warm off-white ground, never pure white */
+  --color-canvas: #fafafa;
+  --color-canvas-deep: #f2f2f0;
   --color-surface: #ffffff;
-  --color-surface-muted: #f6f7f9;
-  --color-surface-sunken: #f0f2f5;
+  --color-surface-muted: #f7f7f6;
+  --color-surface-sunken: #f1f1f0;
 
-  /* Ink */
+  /* Ink: every text tone meets WCAG 2.1 AA (4.5:1) on every surface above */
   --color-ink: #1d2b3a;
   --color-ink-soft: #45566a;
-  --color-ink-muted: #7c8896;
-  --color-ink-faint: #a3adb9;
+  --color-ink-muted: #596878;
+  --color-ink-faint: #5f6e7e;
+
+  /* Decoration only: bullets, dots, rules. Never used for text. */
+  --color-ornament: #b3bcc6;
 
   /* Lines */
-  --color-line: #e6eaef;
-  --color-line-strong: #d6dce4;
+  --color-line: #e7e7e5;
+  --color-line-strong: #d9d9d6;
 
   /* Brand */
   --color-brand: #1668e3;
@@ -34,7 +37,7 @@
   --color-brand-ring: #a9ccfb;
 
   /* Status */
-  --color-danger: #d64545;
+  --color-danger: #bb3535;
 
   /* Radii */
   --radius-card: 1.5rem;
@@ -296,7 +299,7 @@
   width: 4px;
   height: 4px;
   border-radius: 999px;
-  background: var(--color-ink-faint);
+  background: var(--color-ornament);
 }
 
 .md ol {
@@ -422,4 +425,64 @@
 }
 .token.italic {
   font-style: italic;
+}
+
+/* ------------------------------------------------------------------ *
+ * Accessibility helpers
+ * ------------------------------------------------------------------ */
+
+/* Expands an interactive control's hit area to 44x44px on touch devices
+ * without changing its visual footprint (WCAG 2.5.5 target size). */
+@utility hit-target {
+  @media (pointer: coarse) {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(100%, 44px);
+      height: max(100%, 44px);
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+/* Skip link: visually hidden until focused, then pinned to the top left. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  border-radius: 0.5rem;
+  background: var(--color-ink);
+  color: #fff;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Skeleton loaders
+ * ------------------------------------------------------------------ */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  border-radius: 0.5rem;
+  background: var(--color-surface-sunken);
+  animation: skeleton-pulse 1.6s ease-in-out infinite;
 }

@@ -218,7 +218,7 @@ export const PROMPT_LIBRARY: PromptTemplate[] = [
     id: "pl_tokens",
     category: "Design system",
     title: "Token taxonomy",
-    body: "Propose a three-tier token taxonomy for our palette — primitives, semantic and component — and show the naming pattern for each tier.",
+    body: "Propose a three-tier token taxonomy for our palette (primitives, semantic and component) and show the naming pattern for each tier.",
   },
   {
     id: "pl_critique",

@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Message input dock: auto-growing textarea, attachment handling with simulated
+ * uploads, inline reference toggles, and send/stop controls.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowUp, Paperclip, Square } from "lucide-react";
 import {
@@ -19,6 +23,9 @@ import type { Attachment } from "@/lib/types";
 import { attachmentFromFile, simulateUpload } from "@/lib/uploads";
 import { cn } from "@/lib/utils";
 import { useChatStore } from "@/store/chat-store";
+
+/** Hard cap on prompt length, mirrored by the API route. */
+export const MAX_PROMPT_LENGTH = 4000;
 
 export type ComposerHandle = {
   focus: () => void;
@@ -94,7 +101,7 @@ export const Composer = forwardRef<ComposerHandle>(function Composer(_, ref) {
   useImperativeHandle(ref, () => ({
     focus: () => textareaRef.current?.focus(),
     setValue: (next: string) => {
-      setValue(next);
+      setValue(next.slice(0, MAX_PROMPT_LENGTH));
       requestAnimationFrame(() => {
         const element = textareaRef.current;
         if (!element) return;
@@ -191,9 +198,11 @@ export const Composer = forwardRef<ComposerHandle>(function Composer(_, ref) {
           >
             <div className="relative min-w-0 flex-1">
               <textarea
+                id="composer-input"
                 ref={textareaRef}
                 value={value}
                 rows={1}
+                maxLength={MAX_PROMPT_LENGTH}
                 onChange={(event) => setValue(event.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
@@ -218,7 +227,7 @@ export const Composer = forwardRef<ComposerHandle>(function Composer(_, ref) {
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 aria-label="Attach files"
-                className="-mr-1 mb-0.5 flex h-7 w-7 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-surface-sunken hover:text-ink"
+                className="hit-target -mr-1 mb-0.5 flex h-7 w-7 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-surface-sunken hover:text-ink"
               >
                 <Paperclip
                   className="h-[1.15rem] w-[1.15rem]"
@@ -295,6 +304,14 @@ export const Composer = forwardRef<ComposerHandle>(function Composer(_, ref) {
             )}
           </div>
 
+          {value.length > MAX_PROMPT_LENGTH - 400 && (
+            <p
+              className="shrink-0 text-[13px] tabular-nums text-ink-muted"
+              aria-live="polite"
+            >
+              {MAX_PROMPT_LENGTH - value.length} characters left
+            </p>
+          )}
           <p className="hidden shrink-0 text-[13px] text-ink-muted sm:block">
             <kbd className="font-sans font-semibold text-ink-soft">esc</kbd> to{" "}
             <span className="font-semibold text-ink-soft">cancel</span> ·{" "}

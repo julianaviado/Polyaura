@@ -1,7 +1,7 @@
 # Polyaura
 
 An AI chat interface built from Figma mockups, for a design portfolio. There is
-no model behind it — the streaming, the uploads and the reference toggles are
+no model behind it; the streaming, the uploads and the reference toggles are
 all simulated so every state in the design can be reached and demonstrated.
 
 <!-- Run `npm run dev` and open http://localhost:3000 -->
@@ -11,13 +11,13 @@ all simulated so every state in the design can be reached and demonstrated.
 | Piece     | Choice                      | Why                                                             |
 | --------- | --------------------------- | --------------------------------------------------------------- |
 | Framework | Next.js 15 (App Router)     | Route handlers give a real streaming endpoint without a backend |
-| UI        | React 19 + TypeScript       | —                                                               |
+| UI        | React 19 + TypeScript       | Typed components end to end                                     |
 | Styling   | Tailwind CSS v4             | Design tokens live in `@theme`, so the palette is one file      |
 | State     | Zustand + `persist`         | Conversations survive a reload without a database               |
 | Motion    | Motion (Framer Motion)      | Panel transitions, message entrances, chip enter/exit           |
 | Markdown  | react-markdown + remark-gfm | Headings, lists, tables                                         |
 | Code      | Prism                       | Syntax highlighting inside answers                              |
-| Icons     | lucide-react                | —                                                               |
+| Icons     | lucide-react                | Consistent stroke icon set                                      |
 | Type      | Figtree via `next/font`     | Self-hosted, no layout shift                                    |
 
 ## Running it
@@ -32,7 +32,7 @@ npm run typecheck  # tsc --noEmit
 ## How the fake backend works
 
 `POST /api/chat` picks a canned reply by keyword (see `src/data/responses.ts`),
-then streams it back as newline-delimited JSON — `{"type":"delta"}` events
+then streams it back as newline-delimited JSON: `{"type":"delta"}` events
 followed by `citations` and `done`. Chunks are word-sized with jittered delays,
 and the request's abort signal stops the stream, so **Stop generating** cancels
 mid-answer exactly as it would against a real model.
@@ -48,7 +48,7 @@ so the chip spinner, the ready state and the size badge are all reachable.
 **Chat**
 
 - Streaming answers with a text caret, a thinking/writing indicator and stop
-- Edit a prompt in place — the turns after it are discarded and the answer re-runs
+- Edit a prompt in place; the turns after it are discarded and the answer re-runs
 - Regenerate, copy, save-to-memory on hover
 - Markdown with tables and highlighted code blocks, each with its own copy button
 - Attachments: click, drag-and-drop anywhere, or paste through the file picker;
@@ -78,6 +78,33 @@ so the chip spinner, the ready state and the size badge are all reachable.
 | `Tab`         | Accept the suggested prompt when the composer is empty      |
 | `Esc`         | Stop generating, clear the composer, or close the top layer |
 
+## Accessibility
+
+Audited with axe-core against WCAG 2.1 A and AA with zero violations across
+the main view, the settings panel, the modals, and the command palette.
+
+- Every text token meets the 4.5:1 contrast minimum on every surface it
+  appears on; decorative marks use a separate token that never carries text.
+- A skip link jumps keyboard users straight to the message input.
+- All scrollable regions are keyboard focusable; all icon-only controls carry
+  accessible names; toggles are labelled switches.
+- Streaming is announced through a polite status region instead of a live
+  region on the transcript, so screen readers are not spammed per token.
+- Interactive controls expand to a 44x44px hit area on touch devices.
+- `prefers-reduced-motion` collapses all animation.
+- Chat history shows an accessible skeleton while persisted state rehydrates.
+
+## Product completeness
+
+- Terms of Service and Privacy Policy boilerplate, reachable from the
+  account menu.
+- A route-level error boundary (`src/app/error.tsx`) and a 404 page.
+- Empty states for new chats, memories, and palette searches; inline error
+  and stopped states on messages with retry.
+- Prompt length is capped client-side with a visible countdown and enforced
+  again by the API route, which also validates every field of the request
+  body before use.
+
 ## Layout notes
 
 The composer is two tiers: a narrow rounded block holding the input, sitting on
@@ -86,7 +113,7 @@ with a masked radial gradient (`composer-notch` in `globals.css`) rather than an
 image, so they stay crisp at any width.
 
 Below 1180px the settings panel becomes an overlay; below 1100px the sidebar
-does too. Both keep the same content — only the container changes.
+does too. Both keep the same content; only the container changes.
 
 ## Structure
 

@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Scrolling transcript with stream-following behavior that releases when the
+ * reader scrolls away, plus the empty state for new chats.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import { ArrowDown } from "lucide-react";
 import {
@@ -72,9 +76,18 @@ export function MessageList({ conversation, onPickPrompt }: MessageListProps) {
 
   return (
     <div className="relative min-h-0 flex-1">
+      {/* Streaming is announced here rather than via a live region on the
+          transcript itself, which would re-announce every token. */}
+      <div role="status" aria-live="polite" className="sr-only">
+        {isStreaming ? "Polyaura is writing a response." : ""}
+      </div>
+
       <div
         ref={scrollRef}
         onScroll={handleScroll}
+        tabIndex={0}
+        aria-label="Conversation"
+        aria-busy={isStreaming}
         className="scrollbar-subtle h-full overflow-y-auto overscroll-contain"
       >
         {conversation.messages.length === 0 ? (
@@ -98,7 +111,7 @@ export function MessageList({ conversation, onPickPrompt }: MessageListProps) {
                   onPickPrompt(
                     message.role === "user"
                       ? `Rewrite this prompt so it is more specific:\n\n${message.content}`
-                      : "Tighten that answer — keep the recommendation, drop the preamble.",
+                      : "Tighten that answer: keep the recommendation, drop the preamble.",
                   )
                 }
                 onSave={() => toggleSaved(conversation.id, message.id)}

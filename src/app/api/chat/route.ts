@@ -4,12 +4,39 @@ import type { Citation } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
+/* Request limits, mirrored by the composer's client-side cap. */
+const MAX_PROMPT_LENGTH = 4000;
+const MAX_ATTACHMENTS = 10;
+const MAX_ATTACHMENT_NAME_LENGTH = 200;
+
+const VALID_VOICES = new Set(["balanced", "concise", "exploratory"]);
+const VALID_REFERENCES = new Set([
+  "knowledgeBase",
+  "campaignMemory",
+  "thirdPartyModels",
+]);
+
 type ChatRequest = {
-  prompt?: string;
-  presetVoice?: "balanced" | "concise" | "exploratory";
-  references?: string[];
-  attachments?: string[];
+  prompt?: unknown;
+  presetVoice?: unknown;
+  references?: unknown;
+  attachments?: unknown;
 };
+
+/** Keeps only well-formed string entries, capped in count and length. */
+function sanitizeStringList(
+  value: unknown,
+  maxItems: number,
+  maxLength: number,
+  allowed?: Set<string>,
+): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item): item is string => typeof item === "string")
+    .filter((item) => (allowed ? allowed.has(item) : item.length > 0))
+    .slice(0, maxItems)
+    .map((item) => item.slice(0, maxLength));
+}
 
 const encoder = new TextEncoder();
 
@@ -49,7 +76,7 @@ function buildCitations(
   if (references.includes("campaignMemory")) {
     citations.push({
       id: "cm-1",
-      label: "Q3 Brand Refresh — decisions log",
+      label: "Q3 Brand Refresh decisions log",
       source: "campaign-memory",
     });
   }
@@ -69,14 +96,32 @@ export async function POST(request: NextRequest) {
     return new Response("Malformed request body", { status: 400 });
   }
 
-  const prompt = (body.prompt ?? "").trim();
+  const prompt = typeof body.prompt === "string" ? body.prompt.trim() : "";
   if (!prompt) {
     return new Response("A prompt is required", { status: 400 });
   }
+  if (prompt.length > MAX_PROMPT_LENGTH) {
+    return new Response(
+      `Prompt exceeds the ${MAX_PROMPT_LENGTH} character limit`,
+      { status: 413 },
+    );
+  }
 
-  const references = body.references ?? [];
-  const attachments = body.attachments ?? [];
-  const voice = body.presetVoice ?? "balanced";
+  const references = sanitizeStringList(
+    body.references,
+    3,
+    32,
+    VALID_REFERENCES,
+  );
+  const attachments = sanitizeStringList(
+    body.attachments,
+    MAX_ATTACHMENTS,
+    MAX_ATTACHMENT_NAME_LENGTH,
+  );
+  const voice =
+    typeof body.presetVoice === "string" && VALID_VOICES.has(body.presetVoice)
+      ? (body.presetVoice as "balanced" | "concise" | "exploratory")
+      : "balanced";
 
   let reply = pickReply(prompt);
 
@@ -95,7 +140,7 @@ export async function POST(request: NextRequest) {
     } (${list}) and factored ${attachments.length === 1 ? "it" : "them"} into this.\n\n${reply}`;
   }
 
-  // The preset's voice only changes pacing here — there is no model to steer.
+  // The preset's voice only changes pacing here; there is no model to steer.
   const paceFloor = voice === "concise" ? 4 : voice === "exploratory" ? 12 : 8;
 
   const chunks = tokenize(reply);

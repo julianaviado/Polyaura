@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Single-select listbox styled as a bordered field, used for the preset picker.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import { Check, ChevronDown } from "lucide-react";
 import { useState } from "react";

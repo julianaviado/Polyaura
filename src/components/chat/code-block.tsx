@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Syntax-highlighted code block with a language label and copy button.
+ */
 import { Check, Copy } from "lucide-react";
 import { useMemo } from "react";
 import Prism from "prismjs";

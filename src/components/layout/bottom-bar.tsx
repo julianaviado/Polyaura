@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Bottom utility dock: pages, search, reading mode, settings, memories, prompt
+ * library, and the account menu.
+ */
 import { AnimatePresence, motion } from "motion/react";
 import {
   Archive,
@@ -7,10 +11,12 @@ import {
   BookOpen,
   Bookmark,
   LogOut,
+  ScrollText,
   Search,
+  ShieldCheck,
   Settings2,
-  Sparkles,
   Trash2,
+  Waypoints,
 } from "lucide-react";
 import { useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
@@ -29,6 +35,7 @@ function AccountMenu() {
   const saved = useChatStore((state) => state.saved);
   const readerMode = useChatStore((state) => state.readerMode);
   const setReaderMode = useChatStore((state) => state.setReaderMode);
+  const setLegalOpen = useChatStore((state) => state.setLegalOpen);
   const clearAll = useChatStore((state) => state.clearAll);
 
   const preset =
@@ -74,7 +81,7 @@ function AccountMenu() {
 
             <div className="flex items-center justify-between gap-2 px-2.5 py-2 text-[13px]">
               <span className="inline-flex items-center gap-2 text-ink-soft">
-                <Sparkles className="h-3.5 w-3.5 text-brand" />
+                <Waypoints className="h-3.5 w-3.5 text-brand" />
                 Preset
               </span>
               <span className="truncate font-medium text-ink">
@@ -111,6 +118,32 @@ function AccountMenu() {
             >
               <Trash2 className="h-3.5 w-3.5" />
               Clear all chats
+            </button>
+
+            <div className="my-1 h-px bg-line" />
+
+            <button
+              type="button"
+              onClick={() => {
+                setLegalOpen("terms");
+                setOpen(false);
+              }}
+              className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium text-ink-muted transition-colors hover:bg-surface-muted hover:text-ink"
+            >
+              <ScrollText className="h-3.5 w-3.5" />
+              Terms of Service
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setLegalOpen("privacy");
+                setOpen(false);
+              }}
+              className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-[13px] font-medium text-ink-muted transition-colors hover:bg-surface-muted hover:text-ink"
+            >
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Privacy Policy
             </button>
 
             <button

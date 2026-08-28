@@ -1,5 +1,8 @@
 "use client";
 
+/**
+ * Circular avatar: user photo, initial fallback, or the brand mark.
+ */
 import { cn } from "@/lib/utils";
 
 type AvatarProps = {

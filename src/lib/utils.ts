@@ -1,3 +1,7 @@
+/**
+ * Small pure helpers: class merging, ids, formatting, and title derivation.
+ */
+
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -56,9 +60,4 @@ export function titleFromText(text: string) {
   const clipped =
     cleaned.length > 48 ? `${cleaned.slice(0, 48).trim()}…` : cleaned;
   return clipped.charAt(0).toUpperCase() + clipped.slice(1);
-}
-
-export function isMac() {
-  if (typeof navigator === "undefined") return false;
-  return /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 }

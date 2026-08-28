@@ -1,5 +1,9 @@
 "use client";
 
+/**
+ * Shared client hooks: outside-dismiss, mount detection, clipboard copy,
+ * textarea auto-resize, and media query tracking.
+ */
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /** Fires when a pointer press lands outside every referenced element. */
