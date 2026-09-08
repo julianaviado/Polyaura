@@ -278,7 +278,9 @@ export const Composer = forwardRef<ComposerHandle>(function Composer(_, ref) {
       </div>
 
       <div className="pointer-events-auto w-full max-w-[58rem] rounded-t-[1.75rem] bg-surface px-8">
-        <div className="flex h-[6.5rem] items-start justify-between gap-4 pt-4">
+        {/* The top padding offsets the centred content so its midline sits level
+            with the bottom-bar buttons flanking the dock. */}
+        <div className="flex h-[6.5rem] items-center justify-between gap-4 pt-6">
           <div className="flex items-center gap-4">
             {knowledgeBase && (
               <div className="flex items-center gap-2 text-[13px] font-medium text-ink-soft">
