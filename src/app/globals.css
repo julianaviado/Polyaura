@@ -46,14 +46,41 @@
 
   /* Shadows */
   --shadow-card:
-    0 1px 2px rgb(23 38 56 / 0.04), 0 12px 34px -12px rgb(23 38 56 / 0.14);
+    0 1px 3px rgb(0 0 0 / 0.05), 0 8px 24px -12px rgb(23 38 56 / 0.08);
   --shadow-float:
-    0 1px 2px rgb(23 38 56 / 0.05), 0 8px 22px -8px rgb(23 38 56 / 0.16);
+    0 1px 3px rgb(0 0 0 / 0.05), 0 6px 16px -8px rgb(23 38 56 / 0.1);
   --shadow-pop:
-    0 2px 6px rgb(23 38 56 / 0.06), 0 18px 44px -14px rgb(23 38 56 / 0.22);
+    0 1px 3px rgb(0 0 0 / 0.06), 0 14px 36px -14px rgb(23 38 56 / 0.16);
+
+  /* ---------------------------------------------------------------- *
+   * Glass
+   *
+   * A frosted surface is four things stacked: a backdrop blur, a tint
+   * over it, a rim catching light along the top edge, and an optional
+   * specular sheen that follows the pointer.
+   *
+   * The tint opacity is not a taste decision. Glass can sit over any
+   * backdrop, and text on it has to clear 4.5:1 in the worst case, so
+   * each tier's floor is the lowest value that still passes over pure
+   * black. That makes this glass restrained by construction: it reads
+   * at the rim and in the blur of whatever moves behind it, never as a
+   * see-through sheet.
+   * ---------------------------------------------------------------- */
+  --glass-tint: 252 252 251;
+  --glass-saturate: 1.4;
+
+  --glass-blur-control: 14px;
+  --glass-blur-popover: 24px;
+  --glass-blur-panel: 28px;
+
+  --glass-floor-control: 0.9;
+  --glass-floor-popover: 0.93;
+  --glass-floor-panel: 0.95;
 
   /* Motion */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-glass: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.36, 0.5, 1);
 }
 
 /* ------------------------------------------------------------------ *
@@ -70,23 +97,16 @@
   }
 
   body {
-    background:
-      radial-gradient(
-        120% 90% at 12% 0%,
-        #f4f6f9 0%,
-        rgba(244, 246, 249, 0) 55%
-      ),
-      linear-gradient(
-        158deg,
-        var(--color-canvas) 0%,
-        var(--color-canvas-deep) 100%
-      );
+    background: linear-gradient(
+      158deg,
+      var(--color-canvas) 0%,
+      var(--color-canvas-deep) 100%
+    );
     background-attachment: fixed;
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    overflow: hidden;
   }
 
   ::selection {
@@ -485,4 +505,122 @@
   border-radius: 0.5rem;
   background: var(--color-surface-sunken);
   animation: skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ *
+ * Glass surfaces
+ *
+ * `.glass` is the base recipe; a tier class sets the blur and tint.
+ * Add `.glass-sheen` for a specular highlight that follows the pointer,
+ * which is worth it on surfaces people actually touch and a waste
+ * everywhere else.
+ *
+ * Usage rules:
+ *   - `glass-control`  icon buttons and pills. Icons and short labels
+ *                      only, never body copy.
+ *   - `glass-popover`  menus, dropdowns, the command palette.
+ *   - `glass-panel`    modals and floating side panels.
+ *   - `glass-veil`     the scrim behind a modal. Carries no text.
+ *
+ * Glass needs something behind it to be worth the cost. Over a flat
+ * ground it reads only as a rim, so reach for it on surfaces that
+ * float over content, not on the page's base layers.
+ * ------------------------------------------------------------------ */
+@layer components {
+  .glass {
+    --glass-blur: var(--glass-blur-popover);
+    --glass-floor: var(--glass-floor-popover);
+
+    position: relative;
+    isolation: isolate;
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--glass-tint) / var(--glass-floor)) 0%,
+      rgb(var(--glass-tint) / calc(var(--glass-floor) + 0.04)) 100%
+    );
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 0 0 1px rgb(255 255 255 / 0.4),
+      0 0 0 1px rgb(23 38 56 / 0.07),
+      var(--shadow-pop);
+  }
+
+  .glass-control {
+    --glass-blur: var(--glass-blur-control);
+    --glass-floor: var(--glass-floor-control);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 0 0 1px rgb(255 255 255 / 0.45),
+      0 0 0 1px rgb(23 38 56 / 0.07),
+      var(--shadow-float);
+  }
+
+  .glass-popover {
+    --glass-blur: var(--glass-blur-popover);
+    --glass-floor: var(--glass-floor-popover);
+  }
+
+  .glass-panel {
+    --glass-blur: var(--glass-blur-panel);
+    --glass-floor: var(--glass-floor-panel);
+  }
+
+  /* Specular highlight. Sits above the tint and below the content, so it
+   * never washes over text. */
+  .glass-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      58% 58% at calc(50% + var(--glass-px, 0) * 38%)
+        calc(28% + var(--glass-py, 0) * 32%),
+      rgb(255 255 255 / 0.6),
+      rgb(255 255 255 / 0) 70%
+    );
+    mix-blend-mode: soft-light;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s var(--ease-glass);
+  }
+
+  .glass-sheen:hover::before,
+  .glass-sheen:focus-within::before,
+  .glass-sheen[data-sheen="on"]::before {
+    opacity: 1;
+  }
+
+  .glass-veil {
+    background: rgb(29 43 58 / 0.16);
+    -webkit-backdrop-filter: blur(3px) saturate(0.92);
+    backdrop-filter: blur(3px) saturate(0.92);
+  }
+}
+
+/* Without backdrop-filter there is no frost to tint, so the surface goes
+ * fully opaque rather than leaving text floating over raw content. */
+@supports not (
+  (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+) {
+  .glass {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--glass-tint)) 0%,
+      rgb(var(--glass-tint)) 100%
+    );
+  }
+  .glass-veil {
+    background: rgb(29 43 58 / 0.38);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-sheen::before {
+    --glass-px: 0;
+    --glass-py: 0;
+  }
 }

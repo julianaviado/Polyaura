@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Avatar } from "@/components/ui/avatar";
+import { glassClass, useSheen } from "@/components/ui/glass";
 import { IconButton } from "@/components/ui/icon-button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { PRESETS, USER } from "@/data/seed";
@@ -40,6 +41,7 @@ function AccountMenu() {
 
   const preset =
     PRESETS.find((item) => item.id === activePresetId) ?? PRESETS[0];
+  const menuRef = useSheen<HTMLDivElement>();
 
   return (
     <div ref={ref} className="relative">
@@ -63,7 +65,11 @@ function AccountMenu() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-12 right-0 z-50 w-64 origin-bottom-right overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-pop"
+            ref={menuRef}
+            className={cn(
+              glassClass("popover", true),
+              "absolute bottom-12 right-0 z-50 w-64 origin-bottom-right overflow-hidden rounded-2xl p-1.5",
+            )}
           >
             <div className="flex items-center gap-3 px-2.5 py-2.5">
               <Avatar name={USER.name} src={USER.avatar} size={38} />
@@ -177,7 +183,10 @@ export function BottomBar() {
         <button
           type="button"
           onClick={() => setPagesOpen(true)}
-          className="pointer-events-auto flex items-center gap-2 rounded-full border border-line bg-white px-3.5 py-2 text-[13px] font-semibold text-ink shadow-float transition-colors hover:border-line-strong"
+          className={cn(
+            glassClass("control", true),
+            "pointer-events-auto flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-semibold text-ink",
+          )}
         >
           <Archive className="h-4 w-4 text-ink-muted" strokeWidth={1.9} />
           View pages

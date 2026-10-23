@@ -13,6 +13,7 @@ import {
   Settings2,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { glassClass } from "@/components/ui/glass";
 import { formatTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useChatStore } from "@/store/chat-store";
@@ -155,7 +156,7 @@ export function CommandPalette() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.16 }}
             onClick={() => setPaletteOpen(false)}
-            className="absolute inset-0 bg-ink/18 backdrop-blur-[2px]"
+            className="glass-veil absolute inset-0"
           />
 
           <motion.div
@@ -166,7 +167,10 @@ export function CommandPalette() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="relative flex max-h-[64vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-pop"
+            className={cn(
+              glassClass("panel"),
+              "flex max-h-[64vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl",
+            )}
             onKeyDown={onKeyDown}
           >
             <div className="flex shrink-0 items-center gap-3 border-b border-line px-4">

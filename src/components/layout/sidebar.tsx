@@ -18,6 +18,7 @@ import {
 import { useMemo, useState } from "react";
 import { IconButton } from "@/components/ui/icon-button";
 import { Tooltip } from "@/components/ui/tooltip";
+import { glassClass } from "@/components/ui/glass";
 import { useDismiss, useMounted } from "@/lib/hooks";
 import type { Conversation } from "@/lib/types";
 import { cn, relativeBucket } from "@/lib/utils";
@@ -330,14 +331,17 @@ export function SidebarDrawer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             onClick={() => setSidebarOpen(false)}
-            className="absolute inset-0 z-40 bg-ink/15 backdrop-blur-[2px]"
+            className="glass-veil absolute inset-0 z-40"
           />
           <motion.div
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -16 }}
             transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-[7rem] left-3 top-[4.5rem] z-40 flex w-64 flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-pop"
+            className={cn(
+              glassClass("panel"),
+              "absolute bottom-[7rem] left-3 top-[4.5rem] z-40 flex w-64 flex-col overflow-hidden rounded-2xl",
+            )}
           >
             <div className="flex items-center justify-between px-5 pt-4">
               <span className="text-[1.15rem] font-bold tracking-tight text-ink">

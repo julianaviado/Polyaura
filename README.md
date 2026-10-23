@@ -78,6 +78,43 @@ so the chip spinner, the ready state and the size badge are all reachable.
 | `Tab`         | Accept the suggested prompt when the composer is empty      |
 | `Esc`         | Stop generating, clear the composer, or close the top layer |
 
+## Glass
+
+A frosted surface scale for anything that floats above content: modals, the
+command palette, menus, dropdowns, the floating side panels, and the buttons
+on the bottom bar. `.glass` is the base recipe and a tier class sets the blur
+and tint; add `.glass-sheen` for a specular highlight that follows the pointer.
+
+| Tier            | Blur | Tint floor | Text over black | Use                                                  |
+| --------------- | ---- | ---------- | --------------- | ---------------------------------------------------- |
+| `glass-control` | 14px | 90%        | 4.44:1          | Icon buttons and pills. Icons and short labels only. |
+| `glass-popover` | 24px | 93%        | 4.76:1          | Menus, dropdowns, the command palette.               |
+| `glass-panel`   | 28px | 95%        | 4.98:1          | Modals and floating side panels.                     |
+| `glass-veil`    | 3px  | n/a        | n/a             | The scrim behind a modal. Carries no text.           |
+
+The tint opacity is not a taste decision. Glass can end up over any backdrop,
+so each tier's floor is the lowest value whose text still clears 4.5:1 over
+pure black. That makes the glass restrained by construction: it reads at the
+rim, in the blur of whatever passes behind it, and in the sheen, never as a
+see-through sheet. Without `backdrop-filter` support every tier falls back to
+a fully opaque surface rather than leaving text over raw content.
+
+Glass needs something behind it to be worth the cost, so it is reserved for
+surfaces that float over content. The chat card, message rows and the composer
+dock stay opaque.
+
+```tsx
+import { Glass, glassClass, useSheen } from "@/components/ui/glass"
+
+<Glass tier="panel" className="rounded-2xl p-5">…</Glass>
+
+// For elements that are already something else:
+<aside className={cn(glassClass("panel"), "rounded-2xl")}>…</aside>
+```
+
+`/design-system` renders the tiers over a deliberately busy backdrop alongside
+the colour, type and motion tokens.
+
 ## Accessibility
 
 Audited with axe-core against WCAG 2.1 A and AA with zero violations across

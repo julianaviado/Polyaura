@@ -6,6 +6,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { glassClass } from "@/components/ui/glass";
 import { useDismiss } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +69,10 @@ export function Dropdown({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute left-0 right-0 top-full z-40 mt-2 origin-top overflow-hidden rounded-xl border border-line bg-white p-1 shadow-pop"
+            className={cn(
+              glassClass("popover"),
+              "absolute left-0 right-0 top-full z-40 mt-2 origin-top overflow-hidden rounded-xl p-1",
+            )}
           >
             {options.map((option) => {
               const active = option.id === value;

@@ -6,6 +6,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { useEffect } from "react";
+import { glassClass } from "@/components/ui/glass";
 import { IconButton } from "@/components/ui/icon-button";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +46,7 @@ export function Modal({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
             onClick={onClose}
-            className="absolute inset-0 bg-ink/18 backdrop-blur-[2px]"
+            className="glass-veil absolute inset-0"
           />
 
           <motion.div
@@ -57,7 +58,8 @@ export function Modal({
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              "relative flex max-h-full w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-pop",
+              glassClass("panel"),
+              "flex max-h-full w-full max-w-xl flex-col overflow-hidden rounded-2xl",
               className,
             )}
           >

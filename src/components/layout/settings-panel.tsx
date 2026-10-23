@@ -9,12 +9,13 @@ import { AnimatePresence, motion } from "motion/react";
 import { Eye, EyeOff, Info, Upload, Waypoints, X } from "lucide-react";
 import { useRef } from "react";
 import { Dropdown } from "@/components/ui/dropdown";
+import { glassClass } from "@/components/ui/glass";
 import { IconButton } from "@/components/ui/icon-button";
 import { Toggle } from "@/components/ui/toggle";
 import { Tooltip } from "@/components/ui/tooltip";
 import { PRESETS } from "@/data/seed";
 import type { UploadedDoc } from "@/lib/types";
-import { fileKind, formatBytes, uid } from "@/lib/utils";
+import { cn, fileKind, formatBytes, uid } from "@/lib/utils";
 import { useChatStore } from "@/store/chat-store";
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -242,7 +243,7 @@ export function SettingsPanel({ floating }: SettingsPanelProps) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
               onClick={() => setSettingsOpen(false)}
-              className="absolute inset-0 z-40 bg-ink/15 backdrop-blur-[2px]"
+              className="glass-veil absolute inset-0 z-40"
             />
             <motion.aside
               initial={{ opacity: 0, x: 24 }}
@@ -250,7 +251,10 @@ export function SettingsPanel({ floating }: SettingsPanelProps) {
               exit={{ opacity: 0, x: 24 }}
               transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
               aria-label="Chat settings"
-              className="absolute bottom-[7rem] right-3 top-4 z-40 flex w-[21rem] max-w-[86vw] flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-pop"
+              className={cn(
+                glassClass("panel"),
+                "absolute bottom-[7rem] right-3 top-4 z-40 flex w-[21rem] max-w-[86vw] flex-col overflow-hidden rounded-2xl",
+              )}
             >
               {header}
               {body}

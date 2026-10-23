@@ -11,8 +11,9 @@ type Size = "sm" | "md" | "lg";
 
 const VARIANTS: Record<Variant, string> = {
   ghost: "text-ink-muted hover:bg-surface-sunken hover:text-ink active:bg-line",
-  raised:
-    "bg-white text-ink-soft shadow-float ring-1 ring-line hover:text-ink hover:ring-line-strong",
+  // Raised buttons float over the canvas, which is where glass earns its
+  // cost: they pick up whatever scrolls behind them.
+  raised: "glass glass-control glass-sheen text-ink-soft hover:text-ink",
 };
 
 const SIZES: Record<Size, string> = {
