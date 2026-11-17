@@ -85,16 +85,19 @@ command palette, menus, dropdowns, the floating side panels, and the buttons
 on the bottom bar. `.glass` is the base recipe and a tier class sets the blur
 and tint; add `.glass-sheen` for a specular highlight that follows the pointer.
 
-| Tier            | Blur | Tint floor | Text over black | Use                                                  |
-| --------------- | ---- | ---------- | --------------- | ---------------------------------------------------- |
-| `glass-control` | 14px | 90%        | 4.44:1          | Icon buttons and pills. Icons and short labels only. |
-| `glass-popover` | 24px | 93%        | 4.76:1          | Menus, dropdowns, the command palette.               |
-| `glass-panel`   | 28px | 95%        | 4.98:1          | Modals and floating side panels.                     |
-| `glass-veil`    | 3px  | n/a        | n/a             | The scrim behind a modal. Carries no text.           |
+| Tier            | Blur | Tint floor | Text over black | Use                                                         |
+| --------------- | ---- | ---------- | --------------- | ----------------------------------------------------------- |
+| `glass-control` | 14px | 55%        | 3.79:1 (icons)  | Icon buttons and capsules. Icons and short ink labels only. |
+| `glass-popover` | 24px | 93%        | 4.76:1          | Menus, dropdowns, the command palette.                      |
+| `glass-panel`   | 28px | 95%        | 4.98:1          | Modals and floating side panels.                            |
+| `glass-veil`    | 3px  | n/a        | n/a             | The scrim behind a modal. Carries no text.                  |
 
-The tint opacity is not a taste decision. Glass can end up over any backdrop,
-so each tier's floor is the lowest value whose text still clears 4.5:1 over
-pure black. That makes the glass restrained by construction: it reads at the
+The tint opacity is not a taste decision. For the tiers that hold prose, each
+floor is the lowest value whose text still clears 4.5:1 over pure black.
+`glass-control` is the exception: it carries icons and short labels, never
+body copy, so it is sized by non-text contrast (WCAG 1.4.11, 3:1) and can stay
+far more transparent. Measured on the app's own ground its icons read 3.79:1
+and its labels 7.19:1. That makes the glass restrained by construction: it reads at the
 rim, in the blur of whatever passes behind it, and in the sheen, never as a
 see-through sheet. Without `backdrop-filter` support every tier falls back to
 a fully opaque surface rather than leaving text over raw content.
@@ -113,6 +116,8 @@ top-left and bottom-right with darker returns just inside them.
 surface can carry a softer edge without restating the stack. A bevel is
 declared after the tiers and sets `box-shadow` outright, so it replaces the
 tier's plain rim; the tier still supplies blur and tint.
+
+The bottom bar uses the full `.bevel` on one capsule per cluster, so each group of controls reads as a single pane of glass rather than a row of separate surfaces; the controls inside carry only their own hover state.
 
 The sidebar uses it for a single marker that slides between rows, rather than
 each row painting its own active state, so the selection reads as one object
