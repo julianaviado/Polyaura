@@ -51,7 +51,7 @@ function AccountMenu() {
         aria-label="Account menu"
         aria-expanded={open}
         className={cn(
-          "flex h-10 w-10 items-center justify-center rounded-full transition-shadow",
+          "flex h-9 w-9 items-center justify-center rounded-full transition-shadow",
           open && "ring-2 ring-brand-ring",
         )}
       >
@@ -179,97 +179,104 @@ export function BottomBar() {
 
   return (
     <>
-      <div className="pointer-events-none absolute bottom-5 left-0 z-40 flex items-center gap-2 px-6">
-        <button
-          type="button"
-          onClick={() => setPagesOpen(true)}
+      {/* One capsule holding the whole cluster, rather than each control
+          carrying its own surface: the glass reads as a single object. */}
+      <div className="pointer-events-none absolute bottom-5 left-0 z-40 flex items-center px-6">
+        <div
           className={cn(
             glassClass("control", true),
-            "bevel-thin pointer-events-auto flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-semibold text-ink",
+            "bevel pointer-events-auto flex items-center gap-1 rounded-full p-1.5",
           )}
         >
-          <Archive className="h-4 w-4 text-ink-muted" strokeWidth={1.9} />
-          View pages
-        </button>
-
-        <Tooltip label="Search" shortcut="⌘K" side="top">
-          <IconButton
-            label="Search chats"
-            variant="raised"
-            round
-            className="pointer-events-auto h-10 w-10"
-            onClick={() => setPaletteOpen(true)}
+          <button
+            type="button"
+            onClick={() => setPagesOpen(true)}
+            className="flex items-center gap-2 rounded-full px-3 py-1.5 text-[13px] font-semibold text-ink transition-colors hover:bg-ink/[0.07]"
           >
-            <Search className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
-          </IconButton>
-        </Tooltip>
+            <Archive className="h-4 w-4 text-ink-muted" strokeWidth={1.9} />
+            View pages
+          </button>
 
-        <Tooltip
-          label={readerMode ? "Exit reading mode" : "Reading mode"}
-          side="top"
-        >
-          <IconButton
+          <Tooltip label="Search" shortcut="⌘K" side="top">
+            <IconButton
+              label="Search chats"
+              variant="chrome"
+              round
+              className="h-9 w-9"
+              onClick={() => setPaletteOpen(true)}
+            >
+              <Search className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip
             label={readerMode ? "Exit reading mode" : "Reading mode"}
-            variant="raised"
-            round
-            className={cn(
-              "pointer-events-auto h-10 w-10",
-              readerMode && "text-brand ring-brand-ring",
-            )}
-            onClick={() => setReaderMode(!readerMode)}
+            side="top"
           >
-            <BookOpen className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
-          </IconButton>
-        </Tooltip>
+            <IconButton
+              label={readerMode ? "Exit reading mode" : "Reading mode"}
+              variant="chrome"
+              round
+              className={cn("h-9 w-9", readerMode && "text-brand")}
+              onClick={() => setReaderMode(!readerMode)}
+            >
+              <BookOpen className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
+            </IconButton>
+          </Tooltip>
+        </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-5 right-0 z-40 flex items-center gap-2 px-6">
-        <Tooltip label="Chat settings" side="top">
-          <IconButton
-            label="Chat settings"
-            variant="raised"
-            round
-            className={cn(
-              "pointer-events-auto h-10 w-10",
-              settingsOpen && "text-brand ring-brand-ring",
-            )}
-            onClick={() => setSettingsOpen(!settingsOpen)}
-          >
-            <Settings2 className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
-          </IconButton>
-        </Tooltip>
+      <div className="pointer-events-none absolute bottom-5 right-0 z-40 flex items-center px-6">
+        <div
+          className={cn(
+            glassClass("control", true),
+            "bevel pointer-events-auto flex items-center gap-1 rounded-full p-1.5",
+          )}
+        >
+          <Tooltip label="Chat settings" side="top">
+            <IconButton
+              label="Chat settings"
+              variant="chrome"
+              round
+              className={cn("h-9 w-9", settingsOpen && "text-brand")}
+              onClick={() => setSettingsOpen(!settingsOpen)}
+            >
+              <Settings2 className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
+            </IconButton>
+          </Tooltip>
 
-        <Tooltip label="Memories" side="top">
-          <IconButton
-            label="Memories"
-            variant="raised"
-            round
-            className="pointer-events-auto relative h-10 w-10"
-            onClick={() => setSavedOpen(true)}
-          >
-            <Bookmark className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
-            {savedCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-bold text-white">
-                {savedCount}
-              </span>
-            )}
-          </IconButton>
-        </Tooltip>
+          <Tooltip label="Memories" side="top">
+            <IconButton
+              label="Memories"
+              variant="chrome"
+              round
+              className="relative h-9 w-9"
+              onClick={() => setSavedOpen(true)}
+            >
+              <Bookmark className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
+              {savedCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand px-1 text-[10px] font-bold text-white">
+                  {savedCount}
+                </span>
+              )}
+            </IconButton>
+          </Tooltip>
 
-        <Tooltip label="Prompt library" side="top">
-          <IconButton
-            label="Prompt library"
-            variant="raised"
-            round
-            className="pointer-events-auto h-10 w-10"
-            onClick={() => setPromptsOpen(true)}
-          >
-            <BookMarked className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
-          </IconButton>
-        </Tooltip>
+          <Tooltip label="Prompt library" side="top">
+            <IconButton
+              label="Prompt library"
+              variant="chrome"
+              round
+              className="h-9 w-9"
+              onClick={() => setPromptsOpen(true)}
+            >
+              <BookMarked className="h-[1.1rem] w-[1.1rem]" strokeWidth={1.9} />
+            </IconButton>
+          </Tooltip>
 
-        <div className="pointer-events-auto">
-          <AccountMenu />
+          <div className="ml-0.5">
+            <AccountMenu />
+          </div>
         </div>
       </div>
     </>

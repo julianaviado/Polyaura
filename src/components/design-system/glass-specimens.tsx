@@ -21,9 +21,9 @@ const TIERS: {
   {
     tier: "control",
     blur: "14px",
-    tint: "90%",
-    overBlack: "4.44",
-    use: "Icon buttons and pills. Icons and short labels only, never body copy.",
+    tint: "55%",
+    overBlack: "2.07",
+    use: "Icon buttons and capsules. Sized by non-text contrast (3:1), so it stays far more transparent than the tiers that hold prose.",
   },
   {
     tier: "popover",

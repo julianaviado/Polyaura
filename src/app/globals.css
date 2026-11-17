@@ -85,7 +85,10 @@
   --glass-reflex-light: 1;
   --glass-reflex-dark: 1;
 
-  --glass-floor-control: 0.9;
+  /* Control is the one tier sized by non-text contrast (WCAG 1.4.11, 3:1):
+   * it carries icons and short ink labels, never body copy, so it can stay
+   * far more transparent than the tiers that hold prose. */
+  --glass-floor-control: 0.55;
   --glass-floor-popover: 0.93;
   --glass-floor-panel: 0.95;
 

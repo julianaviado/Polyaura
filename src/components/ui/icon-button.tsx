@@ -6,15 +6,18 @@
 import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "ghost" | "raised";
+type Variant = "ghost" | "raised" | "chrome";
 type Size = "sm" | "md" | "lg";
 
 const VARIANTS: Record<Variant, string> = {
   ghost: "text-ink-muted hover:bg-surface-sunken hover:text-ink active:bg-line",
-  // Raised buttons float over the canvas, which is where glass earns its
-  // cost: they pick up whatever scrolls behind them.
+  // Raised buttons float over the canvas on their own, which is where glass
+  // earns its cost: they pick up whatever scrolls behind them.
   raised:
     "glass glass-control glass-sheen bevel-thin text-ink-soft hover:text-ink",
+  // Chrome buttons sit inside a glass capsule that already supplies the
+  // surface, so they carry only their own hover state.
+  chrome: "text-ink-soft hover:bg-ink/[0.07] hover:text-ink",
 };
 
 const SIZES: Record<Size, string> = {
