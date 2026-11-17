@@ -103,7 +103,7 @@ function ConversationRow({ conversation }: { conversation: Conversation }) {
           "flex w-full items-center gap-2 rounded-lg py-2 pl-3 pr-8 text-left text-[13.5px] font-medium transition-colors",
           active
             ? "bg-white text-ink shadow-[0_1px_2px_rgb(23_38_56/0.05)]"
-            : "text-ink-soft hover:bg-white/70 hover:text-ink",
+            : "text-ink-soft hover:bg-ink/[0.05] hover:text-ink",
         )}
       >
         {conversation.pinned && (
@@ -200,7 +200,12 @@ function History() {
   );
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col px-3 pb-4">
+    <div
+      className={cn(
+        glassClass("panel"),
+        "mx-2 mb-2 flex min-h-0 flex-1 flex-col rounded-2xl px-2 pb-3 pt-3",
+      )}
+    >
       <div className="flex flex-col gap-1.5 px-2 pb-3">
         <button
           type="button"
@@ -213,7 +218,7 @@ function History() {
         <button
           type="button"
           onClick={() => setPaletteOpen(true)}
-          className="flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] font-medium text-ink-muted transition-colors hover:bg-white/70 hover:text-ink"
+          className="flex items-center gap-2 rounded-xl px-3 py-2 text-[13.5px] font-medium text-ink-muted transition-colors hover:bg-ink/[0.05] hover:text-ink"
         >
           <Search className="h-4 w-4" strokeWidth={1.9} />
           Search chats

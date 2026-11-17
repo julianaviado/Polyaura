@@ -16,6 +16,7 @@ import { PagesModal } from "@/components/layout/pages-modal";
 import { PromptsModal } from "@/components/layout/prompts-modal";
 import { SavedModal } from "@/components/layout/saved-modal";
 import { SettingsPanel } from "@/components/layout/settings-panel";
+import { ShaderBackground } from "@/components/layout/shader-background";
 import { Sidebar, SidebarDrawer } from "@/components/layout/sidebar";
 import { useMediaQuery } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
@@ -110,73 +111,81 @@ export function AppShell() {
   };
 
   return (
-    <div
-      className="relative flex h-dvh w-full overflow-hidden"
-      onDragEnter={onDragEnter}
-      onDragOver={(event) => event.preventDefault()}
-      onDragLeave={onDragLeave}
-      onDrop={onDrop}
-    >
-      <motion.aside
-        initial={false}
-        animate={{ width: navCollapsed ? "4.5rem" : "16rem" }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 h-full shrink-0 overflow-hidden pb-[6.5rem]"
-        aria-label="Chat history"
+    <>
+      <ShaderBackground />
+      <div
+        className="shell relative flex h-dvh w-full overflow-hidden"
+        onDragEnter={onDragEnter}
+        onDragOver={(event) => event.preventDefault()}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
       >
-        <Sidebar collapsed={navCollapsed} />
-      </motion.aside>
+        <motion.aside
+          initial={false}
+          animate={{ width: navCollapsed ? "4.5rem" : "16rem" }}
+          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="relative z-10 h-full shrink-0 overflow-hidden pb-[6.5rem]"
+          aria-label="Chat history"
+        >
+          <Sidebar collapsed={navCollapsed} />
+        </motion.aside>
 
-      {floatingNav && !readerMode && <SidebarDrawer />}
+        {floatingNav && !readerMode && <SidebarDrawer />}
 
-      <main className="relative flex min-w-0 flex-1 flex-col">
-        <div className="min-h-0 flex-1 px-4 pb-[7.75rem] pt-6 sm:px-6">
-          <div
-            className={cn(
-              "mx-auto flex h-full w-full flex-col overflow-hidden rounded-3xl border border-white/70 bg-surface shadow-card transition-[max-width] duration-300",
-              readerMode ? "max-w-[46rem] [&_.md]:text-base" : "max-w-[64rem]",
-            )}
-          >
-            <MessageList conversation={conversation} onPickPrompt={usePrompt} />
-          </div>
-        </div>
-
-        <div className="absolute inset-x-0 bottom-0">
-          <Composer ref={composerRef} />
-        </div>
-      </main>
-
-      <SettingsPanel floating={floatingPanel} />
-
-      <BottomBar />
-
-      <CommandPalette />
-      <PagesModal />
-      <SavedModal />
-      <PromptsModal onUse={usePrompt} />
-      <LegalModal />
-
-      <AnimatePresence>
-        {dragging && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
-            className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-brand/8 backdrop-blur-[1px]"
-          >
-            <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-brand-ring bg-white/95 px-10 py-8 shadow-pop">
-              <UploadCloud className="h-8 w-8 text-brand" strokeWidth={1.7} />
-              <p className="text-[15px] font-semibold text-ink">
-                Drop files to attach
-              </p>
-              <p className="text-[13px] text-ink-muted">
-                PDFs, images and specs, up to 25 MB each
-              </p>
+        <main className="relative flex min-w-0 flex-1 flex-col">
+          <div className="min-h-0 flex-1 px-4 pb-[7.75rem] pt-6 sm:px-6">
+            <div
+              className={cn(
+                "mx-auto flex h-full w-full flex-col overflow-hidden rounded-3xl border border-white/70 bg-surface shadow-card transition-[max-width] duration-300",
+                readerMode
+                  ? "max-w-[46rem] [&_.md]:text-base"
+                  : "max-w-[64rem]",
+              )}
+            >
+              <MessageList
+                conversation={conversation}
+                onPickPrompt={usePrompt}
+              />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+          </div>
+
+          <div className="absolute inset-x-0 bottom-0">
+            <Composer ref={composerRef} />
+          </div>
+        </main>
+
+        <SettingsPanel floating={floatingPanel} />
+
+        <BottomBar />
+
+        <CommandPalette />
+        <PagesModal />
+        <SavedModal />
+        <PromptsModal onUse={usePrompt} />
+        <LegalModal />
+
+        <AnimatePresence>
+          {dragging && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center bg-brand/8 backdrop-blur-[1px]"
+            >
+              <div className="flex flex-col items-center gap-3 rounded-3xl border-2 border-dashed border-brand-ring bg-white/95 px-10 py-8 shadow-pop">
+                <UploadCloud className="h-8 w-8 text-brand" strokeWidth={1.7} />
+                <p className="text-[15px] font-semibold text-ink">
+                  Drop files to attach
+                </p>
+                <p className="text-[13px] text-ink-muted">
+                  PDFs, images and specs, up to 25 MB each
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
   );
 }

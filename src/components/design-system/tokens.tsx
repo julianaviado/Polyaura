@@ -12,8 +12,8 @@ const INK = [
 ];
 
 const SURFACE = [
-  ["--color-canvas", "#fafafa", "The warm ground"],
-  ["--color-canvas-deep", "#f2f2f0", "Ground gradient end"],
+  ["--color-canvas", "#82b6ed", "Ground gradient, light end"],
+  ["--color-canvas-deep", "#2f639e", "Ground gradient, dark end"],
   ["--color-surface", "#ffffff", "Cards and panels"],
   ["--color-surface-muted", "#f7f7f6", "User message rows"],
   ["--color-surface-sunken", "#f1f1f0", "Inline code, badges"],

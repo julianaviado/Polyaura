@@ -103,6 +103,31 @@ Glass needs something behind it to be worth the cost, so it is reserved for
 surfaces that float over content. The chat card, message rows and the composer
 dock stay opaque.
 
+## Background
+
+The ground is a GPU-composited gradient with a drifting light edge, a lens
+flare and a lens distortion pass, built with [`shaders`](https://shaders.com)
+and mounted in `src/components/layout/shader-background.tsx`.
+
+It falls back to a static CSS rendition of the same gradient, painted on
+`body`, in two cases: the browser has no WebGPU (Firefox and older Safari),
+reported through the renderer's own `onUnavailable`; or the reader asked for
+reduced motion, where mounting an animated canvas would override a deliberate
+preference.
+
+The ground forced one design decision. It runs from `#82b6ed` down to
+`#2f639e`, and across that range neither dark nor light text clears 4.5:1:
+
+| Chrome text                | Gradient, light end | Gradient, dark end |
+| -------------------------- | ------------------- | ------------------ |
+| Dark ink, directly on it   | 6.76:1              | 2.33:1             |
+| White, directly on it      | 2.13:1              | 6.18:1             |
+| Dark ink, on `glass-panel` | 13.08:1             | 6.83:1             |
+
+So the sidebar history moved onto glass, which is the only treatment legible
+along the whole gradient. Measured on the rendered page, the bucket labels
+read 4.93:1 and the chat rows 7.06:1 against the glass they actually sit on.
+
 ```tsx
 import { Glass, glassClass, useSheen } from "@/components/ui/glass"
 

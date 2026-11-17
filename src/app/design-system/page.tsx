@@ -73,7 +73,7 @@ export default function DesignSystemPage() {
         <Section
           id="colour"
           title="Colour"
-          lede="A warm off-white ground with a near-navy ink scale. Every text tone clears 4.5:1 on every surface it is allowed to sit on; the ornament token is the one grey that never carries text."
+          lede="A gradient ground with a near-navy ink scale. Because the ground runs from light to dark, no single text colour clears 4.5:1 across the whole of it, so chrome that sits on the ground rides on glass instead. The ornament token is the one grey that never carries text."
         >
           <Swatches />
         </Section>
