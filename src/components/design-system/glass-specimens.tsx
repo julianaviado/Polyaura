@@ -83,6 +83,25 @@ export function GlassSpecimens() {
 
       <Backdrop>
         <div className="flex flex-wrap items-start gap-5">
+          <Glass
+            tier="popover"
+            sheen={sheen}
+            className="bevel w-[15.5rem] rounded-2xl p-5"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-wider text-ink-muted">
+              + bevel
+            </p>
+            <p className="mt-2 text-[15px] font-semibold text-ink">
+              The slab edge
+            </p>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-ink-soft">
+              Eight stacked inset shadows standing in for refraction at the
+              edges. Replaces the tier&rsquo;s plain rim.
+            </p>
+            <p className="mt-3 border-t border-line/70 pt-2.5 font-mono text-[11.5px] text-ink-muted">
+              shadow only
+            </p>
+          </Glass>
           {TIERS.map((item) => (
             <Glass
               key={item.tier}

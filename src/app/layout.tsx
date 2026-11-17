@@ -1,12 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Figtree } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-
-const figtree = Figtree({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-figtree",
-});
 
 export const metadata: Metadata = {
   title: "Polyaura AI chat",
@@ -16,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#eef1f5",
+  themeColor: "#82b6ed",
   width: "device-width",
   initialScale: 1,
 };
@@ -27,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={figtree.variable}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body>
         <a href="#composer-input" className="skip-link">
           Skip to message input

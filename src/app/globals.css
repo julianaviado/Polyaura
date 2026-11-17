@@ -5,10 +5,10 @@
  * ------------------------------------------------------------------ */
 @theme {
   --font-sans:
-    var(--font-figtree), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
   --font-mono:
-    ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
+    var(--font-geist-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Ground: the stops the shader background paints, and the static
    * fallback for browsers without WebGPU. Chrome that sits directly on
@@ -75,6 +75,15 @@
   --glass-blur-control: 14px;
   --glass-blur-popover: 24px;
   --glass-blur-panel: 28px;
+
+  /* Liquid bevel: the rim light that makes glass read as a thick slab
+   * rather than a tinted rectangle. Eight stacked inset shadows stand in
+   * for refraction at the edges: bright bevels catching light top-left and
+   * bottom-right, darker returns just inside them. The two reflex values
+   * scale the light and dark halves together, so one surface can carry a
+   * softer or harder edge without restating the stack. */
+  --glass-reflex-light: 1;
+  --glass-reflex-dark: 1;
 
   --glass-floor-control: 0.9;
   --glass-floor-popover: 0.93;
@@ -669,4 +678,67 @@
 .shell {
   position: relative;
   z-index: 1;
+}
+
+/* ------------------------------------------------------------------ *
+ * Liquid bevel
+ *
+ * `.bevel` is the full slab edge, for surfaces big enough to read it.
+ * `.bevel-thin` is the shallower version for small moving parts, where
+ * the full stack would muddy at that size.
+ *
+ * A bevel is declared after the tiers and sets `box-shadow` outright, so it
+ * replaces the tier's plain rim rather than stacking with it: the tier still
+ * supplies blur and tint, the bevel takes over the edge.
+ * ------------------------------------------------------------------ */
+@layer components {
+  .bevel {
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.1)),
+      inset 1.8px 3px 0 -2px
+        rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.9)),
+      inset -2px -2px 0 -2px
+        rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.8)),
+      inset -3px -8px 1px -6px
+        rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.6)),
+      inset -0.3px -1px 4px 0
+        rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.12)),
+      inset -1.5px 2.5px 0 -2px
+        rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.2)),
+      inset 0 3px 4px -2px rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.2)),
+      inset 2px -6.5px 1px -4px
+        rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.1)),
+      0 1px 5px 0 rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.1)),
+      0 6px 16px 0 rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.08));
+  }
+
+  .bevel-thin {
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.1)),
+      inset 2px 1px 0 -1px
+        rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.9)),
+      inset -1.5px -1px 0 -1px
+        rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.8)),
+      inset -2px -6px 1px -5px
+        rgb(255 255 255 / calc(var(--glass-reflex-light) * 0.6)),
+      inset -1px 2px 3px -1px
+        rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.2)),
+      inset 0 -4px 1px -2px rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.1)),
+      0 3px 6px 0 rgb(29 43 58 / calc(var(--glass-reflex-dark) * 0.08));
+  }
+}
+
+/* The one marker that slides between navigation rows. Transform and height
+ * are driven from measured geometry, so it tracks rows of any size. */
+.nav-marker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 0;
+  border-radius: 999px;
+  pointer-events: none;
+  transition:
+    transform 0.42s var(--ease-spring),
+    height 0.42s var(--ease-spring);
 }

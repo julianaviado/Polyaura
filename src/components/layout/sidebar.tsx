@@ -15,7 +15,7 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import { IconButton } from "@/components/ui/icon-button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { glassClass } from "@/components/ui/glass";
@@ -95,14 +95,14 @@ function ConversationRow({ conversation }: { conversation: Conversation }) {
   }
 
   return (
-    <div className="group/row relative">
+    <div className="group/row relative z-[1]" data-active={active || undefined}>
       <button
         type="button"
         onClick={() => selectConversation(conversation.id)}
         className={cn(
-          "flex w-full items-center gap-2 rounded-lg py-2 pl-3 pr-8 text-left text-[13.5px] font-medium transition-colors",
+          "flex w-full items-center gap-2 rounded-full py-2 pl-3.5 pr-8 text-left text-[13.5px] font-medium transition-colors",
           active
-            ? "bg-white text-ink shadow-[0_1px_2px_rgb(23_38_56/0.05)]"
+            ? "text-ink"
             : "text-ink-soft hover:bg-ink/[0.05] hover:text-ink",
         )}
       >
@@ -188,6 +188,7 @@ type SidebarProps = {
 
 function History() {
   const conversations = useChatStore((state) => state.conversations);
+  const activeId = useChatStore((state) => state.activeConversationId);
   const newConversation = useChatStore((state) => state.newConversation);
   const setPaletteOpen = useChatStore((state) => state.setPaletteOpen);
 
@@ -198,6 +199,27 @@ function History() {
     () => groupConversations(conversations),
     [conversations],
   );
+
+  // One marker slides between rows rather than each row painting its own
+  // active state, so the selection reads as a single object moving.
+  const listRef = useRef<HTMLDivElement>(null);
+  const [marker, setMarker] = useState<{ y: number; h: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+
+    const measure = () => {
+      const row = list.querySelector<HTMLElement>("[data-active]");
+      setMarker(row ? { y: row.offsetTop, h: row.offsetHeight } : null);
+    };
+
+    measure();
+    // Bucket headings and row widths shift as the list changes around it.
+    const observer = new ResizeObserver(measure);
+    observer.observe(list);
+    return () => observer.disconnect();
+  }, [activeId, groups, mounted]);
 
   return (
     <div
@@ -246,22 +268,34 @@ function History() {
             ))}
           </div>
         )}
-        {mounted &&
-          groups.map((group) => (
-            <section key={group.bucket} className="mb-4">
-              <h2 className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
-                {group.bucket}
-              </h2>
-              <div className="flex flex-col gap-0.5">
-                {group.items.map((conversation) => (
-                  <ConversationRow
-                    key={conversation.id}
-                    conversation={conversation}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
+        <div ref={listRef} className="relative">
+          {marker && (
+            <span
+              aria-hidden
+              className="nav-marker glass glass-control bevel-thin"
+              style={{
+                transform: `translateY(${marker.y}px)`,
+                height: marker.h,
+              }}
+            />
+          )}
+          {mounted &&
+            groups.map((group) => (
+              <section key={group.bucket} className="mb-4">
+                <h2 className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-ink-faint">
+                  {group.bucket}
+                </h2>
+                <div className="flex flex-col gap-0.5">
+                  {group.items.map((conversation) => (
+                    <ConversationRow
+                      key={conversation.id}
+                      conversation={conversation}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+        </div>
       </nav>
     </div>
   );

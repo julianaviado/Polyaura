@@ -68,7 +68,7 @@ function AccountMenu() {
             ref={menuRef}
             className={cn(
               glassClass("popover", true),
-              "absolute bottom-12 right-0 z-50 w-64 origin-bottom-right overflow-hidden rounded-2xl p-1.5",
+              "bevel absolute bottom-12 right-0 z-50 w-64 origin-bottom-right overflow-hidden rounded-2xl p-1.5",
             )}
           >
             <div className="flex items-center gap-3 px-2.5 py-2.5">
@@ -185,7 +185,7 @@ export function BottomBar() {
           onClick={() => setPagesOpen(true)}
           className={cn(
             glassClass("control", true),
-            "pointer-events-auto flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-semibold text-ink",
+            "bevel-thin pointer-events-auto flex items-center gap-2 rounded-full px-3.5 py-2 text-[13px] font-semibold text-ink",
           )}
         >
           <Archive className="h-4 w-4 text-ink-muted" strokeWidth={1.9} />

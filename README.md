@@ -18,7 +18,7 @@ all simulated so every state in the design can be reached and demonstrated.
 | Markdown  | react-markdown + remark-gfm | Headings, lists, tables                                         |
 | Code      | Prism                       | Syntax highlighting inside answers                              |
 | Icons     | lucide-react                | Consistent stroke icon set                                      |
-| Type      | Figtree via `next/font`     | Self-hosted, no layout shift                                    |
+| Type      | Geist via `geist/font`      | Self-hosted, no layout shift                                    |
 
 ## Running it
 
@@ -102,6 +102,23 @@ a fully opaque surface rather than leaving text over raw content.
 Glass needs something behind it to be worth the cost, so it is reserved for
 surfaces that float over content. The chat card, message rows and the composer
 dock stay opaque.
+
+### Liquid bevel
+
+`.bevel` and `.bevel-thin` add the rim light that makes a glass surface read
+as a thick slab rather than a tinted rectangle: eight stacked inset shadows
+standing in for refraction at the edges, bright bevels catching light at the
+top-left and bottom-right with darker returns just inside them.
+`--glass-reflex-light` and `--glass-reflex-dark` scale the two halves, so one
+surface can carry a softer edge without restating the stack. A bevel is
+declared after the tiers and sets `box-shadow` outright, so it replaces the
+tier's plain rim; the tier still supplies blur and tint.
+
+The sidebar uses it for a single marker that slides between rows, rather than
+each row painting its own active state, so the selection reads as one object
+moving. Its position and height are measured from the active row and animated
+with `--ease-spring`, which keeps it correct across bucket headings and rows
+of any size.
 
 ## Background
 
